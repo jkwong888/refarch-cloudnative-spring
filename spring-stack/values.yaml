@@ -127,7 +127,7 @@ zipkinServer:
     pullPolicy: Always
   
   service:
-    name: zipkin-server
+    name: 
     type: ClusterIP
     port: 9411
     internalPort: 9411
