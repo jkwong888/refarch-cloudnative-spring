@@ -1,0 +1,23 @@
+{{ if .Values.turbineServer.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  {{ if .Values.turbineServer.service.name }}
+  name: {{ .Values.turbineServer.service.name }}
+  {{ else }}
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-turbine-server
+  {{ end }}
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: turbine-server
+spec:
+  type: {{ .Values.turbineServer.service.type }}
+  ports:
+  - name: stream
+    port: {{ .Values.turbineServer.service.port }}
+    targetPort: {{ .Values.turbineServer.service.internalPort }}
+  selector:
+    component: turbine-server
+{{ end }}

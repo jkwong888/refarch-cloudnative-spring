@@ -1,0 +1,23 @@
+{{ if .Values.hystrixDashboard.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  {{ if .Values.hystrixDashboard.service.name }}
+  name: {{ .Values.hystrixDashboard.service.name }}
+  {{ else }}
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-hystrix-dashboard
+  {{ end }}
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: hystrix-dashboard
+spec:
+  type: {{ .Values.hystrixDashboard.service.type }}
+  ports:
+  - name: http
+    port: {{ .Values.hystrixDashboard.service.port }}
+    targetPort: {{ .Values.hystrixDashboard.service.internalPort }}
+  selector:
+    component: hystrix-dashboard
+{{ end }}

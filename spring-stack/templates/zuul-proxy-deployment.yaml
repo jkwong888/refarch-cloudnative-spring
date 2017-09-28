@@ -1,0 +1,51 @@
+{{ if .Valeus.zuulProxy.enabled }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-zuul-proxy
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: zuul-proxy
+spec:
+  replicas: {{ .Values.zuulProxy.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.zuulProxy.image.repository }}:{{ .Values.zuulProxy.image.tag }}"
+        imagePullPolicy: {{ .Values.zuulProxy.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.zuulProxy.service.internalPort }}
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.zuulProxy.service.internalPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.zuulProxy.service.internalPort }}
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
+        volumeMounts:
+        - mountPath: /config
+          name: zuul-proxy-config
+      volumes:
+      - name: zuul-proxy-config
+        configMap:
+{{ if .Values.configServer.enabled }}
+          name: {{ .Release.Name }}-{{ .Chart.Name }}-bootstrap
+{{ else }}
+          name: {{ .Release.Name }}-{{ .Chart.Name }}-zuul-proxy
+{{ end }}
+{{ end }}

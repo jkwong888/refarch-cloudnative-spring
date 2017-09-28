@@ -1,0 +1,32 @@
+{{ if .Values.zipkinServer.enabled }}
+{{ if .Values.configServer.enabled }}
+{{ else }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-zipkin-server
+  labels:
+    component: zipkin-server
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  bootstrap.yaml: |+
+    server:
+      port: {{ .Values.zipkinServer.service.internalPort }}
+    spring:
+      application:
+        name: zipkin-server
+  application.yaml: |+
+{{ if .Values.eurekaServer.enabled }}
+    eureka:
+      instance:
+        preferIpAddress: true
+      client:
+        registerWithEureka: true
+        fetchRegistry: true
+        serviceUrl:
+          defaultZone: {{ template "eurekaUrl" . }}
+{{ end }}
+{{ end }}
+{{ end }}

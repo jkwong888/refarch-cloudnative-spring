@@ -1,0 +1,39 @@
+{{ if .Values.eurekaServer.enabled }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{  .Chart.Name }}-eureka-server
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: eureka-server
+spec:
+  replicas:  {{ .Values.eurekaServer.replicaCount }}
+  revisionHistoryLimit: {{ .Values.eurekaServer.revisionHistoryLimit }}
+  template:
+    metadata:
+      labels:
+        component: eureka-server
+    spec:
+      containers:
+      - name: eureka-server
+        image: {{ .Values.eurekaServer.image.repository }}:{{ .Values.eurekaServer.image.tag }}
+        imagePullPolicy: {{ .Values.eurekaServer.image.pullPolicy }}
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.eurekaServer.service.internalPort }}
+          initialDelaySeconds: 20
+        volumeMounts:
+        - mountPath: /config
+          name: eureka-server-config
+      volumes:
+      - name: eureka-server-config
+        configMap:
+{{ if .Values.eurekaServer.configServer.enabled }}
+          name: {{ .Release.Name }}-{{ .Chart.Name }}-bootstrap
+{{ else }}
+          name: {{ .Release.Name }}-{{ .Chart.Name }}-eureka-server
+{{ end }}
+{{ end }}

@@ -1,0 +1,37 @@
+{{ if .Values.turbineServer.enabled }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{  .Chart.Name }}-turbine-server
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: turbine-server
+spec:
+  replicas:  {{ .Values.turbineServer.replicaCount }}
+  revisionHistoryLimit: {{ .Values.turbineServer.revisionHistoryLimit }}
+  template:
+    metadata:
+      labels:
+        component: turbine-server
+    spec:
+      containers:
+      - name: turbine-server
+        image: {{ .Values.turbineServer.image.repository }}:{{ .Values.turbineServer.image.tag }}
+        imagePullPolicy: {{ .Values.turbineServer.image.pullPolicy }}
+        ports:
+        - name: stream
+          containerPort: {{ .Values.turbineServer.service.internalPort }}
+        volumeMounts:
+        - mountPath: /config
+          name: turbine-server-config
+      volumes:
+      - name: turbine-server-config
+        configMap:
+{{ if .Values.configServer.enabled }}
+          name: {{ .Release.Name }}-{{ .Chart.Name }}-bootstrap
+{{ else }}
+          name: {{ .Release.Name }}-{{ .Chart.Name }}-turbine-server
+{{ end }}
+{{ end }}

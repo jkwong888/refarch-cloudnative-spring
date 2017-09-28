@@ -1,8 +1,17 @@
 # Default values for spring-stack.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates
-spring-config-server:
+configServer:
   enabled: true
+
+  replicaCount: 1
+  revisionHistoryLimit: 1
+  
+  image:
+    repository: jkwong/spring-config-server
+    tag: latest
+    pullPolicy: Always
+ 
   spring:
     cloud:
       config:
@@ -10,20 +19,115 @@ spring-config-server:
           git:
             uri:
             searchPaths:
+
   encryption:
     key: 8YiY6ypoTgoLrdyPa1dgijUNfeyWcGTEjESSUuF6o9gKA1ZdgPJj5BUpOQrf7qkK
 
-spring-eureka-server:
+  service:
+    name: 
+    type: ClusterIP
+    port: 8888
+    internalPort: 8888
+  
+  rabbitmq:
+    url:
+    host:
+    port:
+    username:
+    password:
+    virtualHost:
+    sslEnabled: 
+  
+  bootstrap:
+    values: 
+  
+eurekaServer:
   enabled: true
 
-spring-hystrix-dashboard:
+  replicaCount: 1
+  revisionHistoryLimit: 1
+  
+  image:
+    repository: jkwong/spring-eureka-server
+    tag: latest
+    pullPolicy: Always
+  
+  service:
+    name: 
+    type: ClusterIP
+    port: 8761
+    internalPort: 8761
+  
+hystrixDashboard:
   enabled: true
 
-spring-turbine-server:
+  replicaCount: 1
+  revisionHistoryLimit: 1
+  
+  image:
+    repository: jkwong/hystrix-dashboard
+    tag: latest
+    pullPolicy: Always
+  
+  service:
+    name: 
+    type: ClusterIP
+    port: 8383
+    internalPort: 8383
+  
+turbineServer:
   enabled: true
 
-spring-zuul-proxy:
+  replicaCount: 1
+  revisionHistoryLimit: 1
+  
+  image:
+    repository: jkwong/turbine-server
+    tag: latest
+    pullPolicy: Always
+  
+  service:
+    name: 
+    type: ClusterIP
+    port: 8989
+    internalPort: 8989
+  
+zuulProxy:
   enabled: true
 
-zipkin-server:
+  replicaCount: 1
+  revisionHistoryLimit: 1
+ 
+  image:
+    repository: ibmcase/spring-zuul-proxy
+    tag: latest
+    pullPolicy: Always
+
+  service:
+    name: 
+    type: ClusterIP
+    externalPort: 8080
+    internalPort: 8080
+
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      memory: 64Mi
+  
+zipkinServer:
   enabled: true
+
+  replicaCount: 1
+  revisionHistoryLimit: 1
+  
+  image:
+    repository: jkwong/zipkin
+    tag: latest
+    pullPolicy: Always
+  
+  service:
+    name: zipkin-server
+    type: ClusterIP
+    port: 9411
+    internalPort: 9411

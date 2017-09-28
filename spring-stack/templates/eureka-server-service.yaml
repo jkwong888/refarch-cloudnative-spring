@@ -1,0 +1,22 @@
+{{ if .Values.eurekaServer.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  {{ if .Values.eurekaServer.service.name }}
+  name: {{ .Values.eurekaServer.service.name }}
+  {{ else }}
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-eureka-server
+  {{ end }}
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: eureka-server
+spec:
+  type: {{ .Values.eurekaServer.service.type }}
+  ports:
+  - name: http
+    port: {{ .Values.eurekaServer.service.port }}
+  selector:
+    component: eureka-server
+{{ end }}

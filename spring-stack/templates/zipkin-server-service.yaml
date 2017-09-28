@@ -1,0 +1,22 @@
+{{ if .Values.zipkinServer.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  {{ if .Values.zipkinServer.service.name }}
+  name: {{ .Values.zipkinServer.service.name }}
+  {{ else }}
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-zipkin-server
+  {{ end }}
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: zipkin-server
+spec:
+  type: {{ .Values.zipkinServer.service.type }}
+  ports:
+  - name: http
+    port: {{ .Values.zipkinServer.service.port }}
+  selector:
+    component: zipkin-server
+{{ end }}

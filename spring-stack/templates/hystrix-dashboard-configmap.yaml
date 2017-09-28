@@ -1,0 +1,21 @@
+{{ if .Values.hystrixDashboard.enabled }}
+{{ if .Values.configServer.enabled }}
+{{ else }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-hystrix-dashboard
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: hystrix-dashboard
+data:
+  bootstrap.yaml: |+
+    server:
+      port: {{ .Values.hystrixDashboard.service.internalPort }}
+    spring:
+      application:
+        name: hystrix-dashboard
+{{ end }}
+{{ end }}

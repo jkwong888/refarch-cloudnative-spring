@@ -1,0 +1,37 @@
+{{ if .Values.hystrixDashboard.enabled }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{  .Chart.Name }}-hystrix-dashboard
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: hystrix-dashboard
+spec:
+  replicas:  {{ .Values.hystrixDashboard.replicaCount }}
+  revisionHistoryLimit: {{ .Values.hystrixDashboard.revisionHistoryLimit }}
+  template:
+    metadata:
+      labels:
+        component: hystrix-dashboard
+    spec:
+      containers:
+      - name: hystrix-dashboard
+        image: {{ .Values.hystrixDashboard.image.repository }}:{{ .Values.hystrixDashboard.image.tag }}
+        imagePullPolicy: {{ .Values.hystrixDashboard.image.pullPolicy }}
+        ports:
+        - name: stream
+          containerPort: {{ .Values.hystrixDashboard.service.internalPort }}
+        volumeMounts:
+        - mountPath: /config
+          name: hystrix-dashboard-config
+      volumes:
+      - name: hystrix-dashboard-config
+        configMap:
+{{ if .Values.configServer.enabled }}
+          name: {{ .Release.Name }}-{{ .Chart.Name }}-bootstrap
+{{ else }}
+          name: {{ .Release.Name }}-{{ .Chart.Name }}-hystrix-dashboard
+{{ end }}
+{{ end }}

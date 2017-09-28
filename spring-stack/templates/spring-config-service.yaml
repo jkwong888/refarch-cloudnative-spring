@@ -1,0 +1,22 @@
+{{ if .Values.configServer.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+{{ if .Values.configServer.service.name }}
+  name: {{ .Values.configServer.service.name }}
+{{ else }}
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-config-server
+{{ end }}
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: config-server
+spec:
+  type: {{ .Values.configServer.service.type }}
+  ports:
+  - name: http
+    port: {{ .Values.configServer.service.port }}
+  selector:
+    component: config-server
+{{ end }}

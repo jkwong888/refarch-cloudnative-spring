@@ -1,0 +1,26 @@
+{{ if .Values.eurekaServer.enabled }}
+{{ if .Values.configServer.enabled }}
+{{ else }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-eureka-server
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: eureka-server
+data:
+  bootstrap.yaml: |+
+    server:
+      port: {{ .Values.eurekaServer.service.internalPort }}
+    spring:
+      application:
+        name: eureka-server
+  application.yaml: |+
+    eureka:
+      client:
+        serviceUrl:
+          defaultZone: {{ template "eurekaUrl" . }}
+{{ end }}
+{{ end }}

@@ -1,0 +1,41 @@
+{{ if .Values.configServer.enabled }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-config-server
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: config-server
+spec:
+  replicas:  {{ .Values.configServer.replicaCount }}
+  revisionHistoryLimit: {{ .Values.configServer.revisionHistoryLimit }}
+  template:
+    metadata:
+      labels:
+        component: config-server
+    spec:
+      containers:
+      - name: config-server
+        image: {{ .Values.configServer.image.repository }}:{{ .Values.configServer.image.tag }}
+        imagePullPolicy: {{ .Values.configServer.image.pullPolicy }}
+        readinessProbe:
+          httpGet:
+            path: /admin/health
+            port: {{ .Values.configServer.service.internalPort }}
+          initialDelaySeconds: 20
+        volumeMounts:
+        - mountPath: /config
+          name: config-server-data
+        env:
+        - name: ENCRYPT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-{{ .Chart.Name }}-config-server
+              key: encrypt.key
+      volumes:
+      - name: config-server-data
+        configMap:
+          name: {{ .Release.Name }}-{{ .Chart.Name }}-config-server
+{{ end }}

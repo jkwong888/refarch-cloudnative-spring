@@ -1,0 +1,45 @@
+{{ if .Values.configServer.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-bootstrap
+  labels:
+    component: config-server
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  bootstrap.yaml: |+
+    spring:
+      rabbitmq:
+        addresses: {{ .Values.configServer.rabbitmq.url }}
+        host: {{ .Values.configServer.rabbitmq.host }}
+        port: {{ .Values.configServer.rabbitmq.port }}
+        username: {{ .Values.configServer.rabbitmq.username }}
+        password: {{ .Values.configServer.rabbitmq.password }}
+        virtual-host: {{ .Values.configServer.rabbitmq.virtualHost }}
+        ssl:
+          enabled: {{ .Values.configServer.rabbitmq.sslEnabled }}
+      cloud:
+        config:
+          uri: http://{{ .Release.Name }}-{{ .Chart.Name }}:{{ .Values.configServer.service.port }}
+{{ if .Values.zipkinServer.enabled }}
+      zipkin:
+        baseUrl: {{ template "zipkinUrl" . }}
+{{ end }}
+
+{{ if .Values.eurekaServer.enabled }}
+    eureka:
+      client:
+        serviceUrl:
+          defaultZone: {{ template "eurekaUrl" . }}
+      instance:
+         preferIpAddress: true
+         leaseRenewalIntervalInSeconds: 10
+         metadataMap:
+           instanceId: ${spring.application.name}:${server.port:8080}
+{{ end }}
+{{ if .Values.configServer.bootstrap.values }}
+  {{- toYaml .Values.configServer.bootstrap.values | indent 4 }}
+{{ end }}
+{{ end }}

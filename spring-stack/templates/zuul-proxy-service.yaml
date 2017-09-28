@@ -1,0 +1,21 @@
+{{ if .Values.zuulProxy.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-zuul-proxy
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: zuul-proxy
+spec:
+  type: {{ .Values.zuulProxy.service.type }}
+  ports:
+    - port: {{ .Values.zuulProxy.service.externalPort }}
+      targetPort: {{ .Values.zuulProxy.service.internalPort }}
+      protocol: TCP
+      name: http
+  selector:
+    component: zuul-proxy
+{{ end }}

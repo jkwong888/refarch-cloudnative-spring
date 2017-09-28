@@ -1,0 +1,34 @@
+{{ if .Values.turbineServer.enabled }}
+{{ if .Values.configServer.enabled }}
+{{ else }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-turbine-server
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: turbine-server
+data:
+  bootstrap.yaml: |+
+    server:
+      port: {{ .Values.turbineServer.service.internalPort }}
+    spring:
+      application:
+        name: turbine-server
+      cloud:
+        config:
+  application.yaml: |+
+    spring:
+      rabbitmq:
+        addresses: {{ .Values.turbineServer.rabbitmq.url }}
+        host: {{ .Values.turbineServer.rabbitmq.host }}
+        port: {{ .Values.turbineServer.rabbitmq.port }}
+        username: {{ .Values.turbineServer.rabbitmq.username }}
+        password: {{ .Values.turbineServer.rabbitmq.password }}
+        virtual-host: {{ .Values.turbineServer.rabbitmq.virtualHost }}
+        ssl:
+          enabled: {{ .Values.turbineServer.rabbitmq.sslEnabled }}
+{{ end }}
+{{ end }}
