@@ -2,7 +2,7 @@ apiVersion: v1
 entries:
   spring-config-server:
   - apiVersion: v1
-    created: 2017-09-27T22:58:35.407455932-04:00
+    created: 2017-09-27T23:03:14.286945732-04:00
     description: Spring Config Server
     digest: 5c2fc5ad27b53603170d7e4ad5f88cc5ff514d0d4fb001030b0d9f95e89497e0
     name: spring-config-server
@@ -11,7 +11,7 @@ entries:
     version: 1.0.0
   spring-eureka-server:
   - apiVersion: v1
-    created: 2017-09-27T22:58:35.407639619-04:00
+    created: 2017-09-27T23:03:14.287135446-04:00
     description: Spring Eureka Server
     digest: 34040d9cb2da32dfc0b7066bf5cdbf89b931b38138e50919b7fcbc9f1656ab29
     name: spring-eureka-server
@@ -20,7 +20,7 @@ entries:
     version: 1.0.0
   spring-hystrix-dashboard:
   - apiVersion: v1
-    created: 2017-09-27T22:58:35.407802538-04:00
+    created: 2017-09-27T23:03:14.287299653-04:00
     description: Spring Hystrix Dashboard
     digest: 56abea41f9ccb8c46c7d8eecb70faee639f2393eb77a99b9c106b3c4e72f52d3
     name: spring-hystrix-dashboard
@@ -29,16 +29,16 @@ entries:
     version: 1.0.0
   spring-stack:
   - apiVersion: v1
-    created: 2017-09-27T22:58:35.408176789-04:00
+    created: 2017-09-27T23:03:14.287673939-04:00
     description: Spring Cloud stack
-    digest: 9beabe7f62417a7d24bf1e7780ca09c81dd353570c533f5defe6316f3a40a43d
+    digest: b3fd3eb86b1a2e23119a97a883aab03e9343ac8a86ce5030b7d330e3e88201ea
     name: spring-stack
     urls:
     - https://raw.githubusercontent.com/jkwong888/refarch-cloudnative-spring/master/docs/charts/spring-stack-0.1.0.tgz
     version: 0.1.0
   spring-turbine-server:
   - apiVersion: v1
-    created: 2017-09-27T22:58:35.408340758-04:00
+    created: 2017-09-27T23:03:14.287828846-04:00
     description: Spring Turbine Server
     digest: e0ca958a36271f570c13d47b3e5d104bbc843b6b35bd30d75aad1ac22e0fc98c
     name: spring-turbine-server
@@ -47,7 +47,7 @@ entries:
     version: 1.0.0
   spring-zuul-proxy:
   - apiVersion: v1
-    created: 2017-09-27T22:58:35.408566755-04:00
+    created: 2017-09-27T23:03:14.288071836-04:00
     description: A Helm chart for Kubernetes
     digest: b76dcbde4e0539b6f7488f985643aa3279df0397c4796eac9437ddb216e4c05e
     name: spring-zuul-proxy
@@ -56,11 +56,11 @@ entries:
     version: 1.0.0
   zipkin-server:
   - apiVersion: v1
-    created: 2017-09-27T22:58:35.408733492-04:00
+    created: 2017-09-27T23:03:14.288232384-04:00
     description: Zipkin Server
     digest: 86e1b28d2b27f3c87924a380b83d1544f4d222917111d5e979e9b2439389da9b
     name: zipkin-server
     urls:
     - https://raw.githubusercontent.com/jkwong888/refarch-cloudnative-spring/master/docs/charts/zipkin-server-1.0.0.tgz
     version: 1.0.0
-generated: 2017-09-27T22:58:35.407051653-04:00
+generated: 2017-09-27T23:03:14.286559281-04:00

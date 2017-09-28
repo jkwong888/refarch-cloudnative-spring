@@ -1,4 +1,4 @@
-{{ if .Valeus.zuulProxy.enabled }}
+{{ if .Values.zuulProxy.enabled }}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
