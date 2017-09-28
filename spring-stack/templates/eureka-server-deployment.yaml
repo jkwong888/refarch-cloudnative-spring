@@ -31,7 +31,7 @@ spec:
       volumes:
       - name: eureka-server-config
         configMap:
-{{ if .Values.eurekaServer.configServer.enabled }}
+{{ if .Values.configServer.enabled }}
           name: {{ .Release.Name }}-{{ .Chart.Name }}-bootstrap
 {{ else }}
           name: {{ .Release.Name }}-{{ .Chart.Name }}-eureka-server
