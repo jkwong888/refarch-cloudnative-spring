@@ -22,7 +22,7 @@ data:
           enabled: {{ .Values.configServer.rabbitmq.sslEnabled }}
       cloud:
         config:
-          uri: http://{{ .Release.Name }}-{{ .Chart.Name }}:{{ .Values.configServer.service.port }}
+          uri: http://{{ .Release.Name }}-{{ .Chart.Name }}-config-server:{{ .Values.configServer.service.port }}
 {{ if .Values.zipkinServer.enabled }}
       zipkin:
         baseUrl: {{ template "zipkinUrl" . }}

@@ -19,7 +19,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- if .Values.eurekaServer.service.name -}}
 http://{{ .Values.eurekaServer.service.name }}:{{ .Values.eurekaServer.service.port }}/eureka/
 {{- else -}}
-http://{{ .Release.Name }}-{{ .Chart.Name }}:{{ .Values.eurekaServer.service.port }}/eureka/
+http://{{ .Release.Name }}-{{ .Chart.Name }}-eureka-server:{{ .Values.eurekaServer.service.port }}/eureka/
 {{- end -}}
 {{- end -}}
 
@@ -27,6 +27,6 @@ http://{{ .Release.Name }}-{{ .Chart.Name }}:{{ .Values.eurekaServer.service.por
 {{- if .Values.zipkinServer.service.name -}}
 http://{{ .Values.zipkinServer.service.name }}:{{ .Values.zipkinServer.service.port }}/
 {{- else -}}
-http://{{ .Release.Name }}-{{ .Chart.Name }}:{{ .Values.zipkinServer.service.port }}/
+http://{{ .Release.Name }}-{{ .Chart.Name }}-zipkin-server:{{ .Values.zipkinServer.service.port }}/
 {{- end -}}
 {{- end -}}
